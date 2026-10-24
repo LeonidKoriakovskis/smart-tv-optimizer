@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart TV Optimizer | Universal Xiaomi & Android TV Debloater</title>
+  <meta name="description" content="Clean bloatware, disable PatchWall ads & telemetry, and maximize speed on Xiaomi TV, Mi Box 4, and Android TV devices safely via ADB.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Background decorative glows -->
+  <div class="glow-orb glow-orb-1"></div>
+  <div class="glow-orb glow-orb-2"></div>
+  <div class="glow-orb glow-orb-3"></div>
+
+  <div class="app-shell">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="brand-logo">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
+            <polyline points="17 2 12 7 7 2"></polyline>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Smart TV Optimizer</h1>
+          <span class="brand-badge">Universal Xiaomi & Android TV</span>
+        </div>
+      </div>
+
+      <!-- Quick Status Badges -->
+      <div class="header-status">
+        <div id="badge-adb" class="status-pill status-loading">
+          <span class="status-dot"></span>
+          <span id="text-adb-status">Checking ADB...</span>
+        </div>
+        <div id="badge-tv" class="status-pill status-disconnected">
+          <span class="status-dot"></span>
+          <span id="text-tv-status">TV Disconnected</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button id="tab-btn-connect" class="nav-btn active" data-tab="tab-connect">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+        Connection & Setup
+      </button>
+      <button id="tab-btn-presets" class="nav-btn" data-tab="tab-presets">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        1-Click Presets
+      </button>
+      <button id="tab-btn-debloat" class="nav-btn" data-tab="tab-debloat">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+        Debloat Manager
+      </button>
+      <button id="tab-btn-tweaks" class="nav-btn" data-tab="tab-tweaks">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        Speed & Tweaks
+      </button>
+      <button id="tab-btn-restore" class="nav-btn" data-tab="tab-restore">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+        Restore Vault & Logs
+      </button>
+      <button id="tab-btn-guide" class="nav-btn" data-tab="tab-guide">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        How to Use Guide
+      </button>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+      <!-- ================= TAB 1: CONNECTION ================= -->
+      <section id="tab-connect" class="tab-content active">
+        <!-- ADB Missing Banner -->
+        <div id="banner-adb-download" class="banner-box banner-warning hidden">
+          <div class="banner-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          </div>
+          <div class="banner-body">
+            <h3>Android Debug Bridge (ADB) Required</h3>
+            <p>To connect to your Xiaomi TV wirelessly, the official Google Android Platform-Tools need to be set up. Click below to download and configure them automatically with zero manual steps.</p>
+            <div class="banner-actions">
+              <button id="btn-auto-download-adb" class="btn btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Auto-Download ADB (~15MB)
+              </button>
+              <span id="label-download-progress" class="download-status"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2col">
+          <!-- Connection Card -->
+          <div class="card card-glow">
+            <div class="card-header">
+              <h2>Connect to Xiaomi TV / Mi Box</h2>
+              <span class="badge badge-cyan">Wi-Fi ADB</span>
+            </div>
+            <p class="text-muted">Enter your TV's local IP address (found in your TV's <em>Settings &gt; Network</em>) or scan your home Wi-Fi network.</p>
+
+            <form id="form-connect" class="connect-form" onsubmit="return false;">
+              <div class="form-group">
+                <label for="input-tv-ip">TV IP Address</label>
+                <div class="input-with-button">
+                  <input type="text" id="input-tv-ip" placeholder="e.g. 192.168.1.150" value="" autocomplete="off" />
+                  <button type="button" id="btn-scan-network" class="btn btn-secondary" title="Scan local Wi-Fi for Android TVs">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    Scan Wi-Fi
+                  </button>
+                </div>
+                <div id="scan-results" class="scan-results hidden"></div>
+              </div>
+
+              <div class="connect-actions">
+                <button type="submit" id="btn-connect-tv" class="btn btn-primary btn-lg">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
+                  Connect to TV
+                </button>
+                <button type="button" id="btn-disconnect-tv" class="btn btn-danger btn-lg hidden">
+                  Disconnect
+                </button>
+              </div>
+            </form>
+
+            <div id="connect-feedback" class="feedback-msg"></div>
+          </div>
+
+          <!-- Connected Device Card / Live Specs -->
+          <div class="card" id="card-device-info">
+            <div class="card-header">
+              <h2>Device Information</h2>
+              <span id="badge-device-model" class="badge badge-purple">No TV Connected</span>
+            </div>
+
+            <div id="device-info-empty" class="empty-state">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+              <p>Connect your TV via Wi-Fi to read hardware specs, RAM allocation, and installed bloatware.</p>
+            </div>
+
+            <div id="device-info-content" class="device-specs hidden">
+              <div class="spec-row">
+                <span class="spec-label">Device Model:</span>
+                <span class="spec-value highlight" id="spec-model">-</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Manufacturer:</span>
+                <span class="spec-value" id="spec-manufacturer">-</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Android Version:</span>
+                <span class="spec-value" id="spec-android">-</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Animation Scale:</span>
+                <span class="spec-value" id="spec-anim">-</span>
+              </div>
+
+              <!-- RAM Usage Bar -->
+              <div class="ram-container">
+                <div class="ram-header">
+                  <span>RAM Status</span>
+                  <span id="spec-ram-text" class="text-cyan">-- / -- MB</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div id="ram-progress-fill" class="progress-bar-fill" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <div class="device-actions">
+                <button id="btn-quick-refresh-device" class="btn btn-sm btn-secondary">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                  Refresh Specs
+                </button>
+                <button id="btn-reboot-tv" class="btn btn-sm btn-outline-danger">
+                  Reboot TV
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3-Step Guide to Enable ADB on Xiaomi TV -->
+        <div class="card mt-4">
+          <div class="card-header">
+            <h2>How to Enable USB Debugging on your Xiaomi TV / Mi Box</h2>
+            <span class="badge badge-emerald">One-Time Setup</span>
+          </div>
+          <div class="steps-grid">
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <h3>Unlock Developer Options</h3>
+              <p>On your TV, go to <strong>Settings</strong> &gt; <strong>Device Preferences</strong> &gt; <strong>About</strong>.<br>Scroll down to <strong>Build</strong> and press the remote's center OK button <strong>7 times</strong> until you see <em>"You are now a developer!"</em></p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <h3>Enable USB Debugging</h3>
+              <p>Press Back, enter <strong>Developer Options</strong> (now visible in Device Preferences).<br>Scroll down and toggle <strong>USB Debugging</strong> to <strong>ON</strong>.</p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">3</div>
+              <h3>Find IP & Authorize</h3>
+              <p>Check your TV IP under <strong>Settings &gt; Network &gt; Wi-Fi</strong>. Type it above and click Connect.<br>When your TV screen shows <strong>"Allow USB Debugging?"</strong>, check <em>"Always allow"</em> and press <strong>OK</strong>.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 2: 1-CLICK PRESETS ================= -->
+      <section id="tab-presets" class="tab-content">
+        <div class="section-intro">
+          <h2>One-Click Optimization Profiles</h2>
+          <p class="text-muted">Curated, tested presets tailored for Xiaomi Mi Box 4, Mi TV Sticks, and Smart TVs. Safe, effective, and completely reversible.</p>
+        </div>
+
+        <div class="presets-grid">
+          <!-- Preset 1: Speed Demon -->
+          <div class="preset-card preset-featured">
+            <div class="preset-badge">Recommended</div>
+            <div class="preset-icon">🚀</div>
+            <h3>Speed Demon</h3>
+            <p class="preset-desc">Eliminates PatchWall bloat, telemetry, Xiaomi ad daemons, print spooler, and boosts UI animations to 0.5x. Frees up to 600MB of RAM without affecting Google Play or video streaming.</p>
+            <ul class="preset-features">
+              <li>✓ Disables Xiaomi TV Ad Daemon & Banner Splash</li>
+              <li>✓ Kills MIUI TV Analytics & Background Pingers</li>
+              <li>✓ Removes Heavy PatchWall Suggestions</li>
+              <li>✓ Speeds remote navigation animations by 200%</li>
+              <li>✓ Keeps Netflix, Disney+, YouTube & Google Assistant intact</li>
+            </ul>
+            <button id="btn-preset-speed-demon" class="btn btn-primary btn-block btn-lg" onclick="applyPreset('speed_demon')">
+              Apply Speed Demon Profile
+            </button>
+          </div>
+
+          <!-- Preset 2: Balanced -->
+          <div class="preset-card">
+            <div class="preset-icon">🛡️</div>
+            <h3>Balanced & Clean</h3>
+            <p class="preset-desc">Subtle optimization that leaves your current home screen layout untouched while silently halting background telemetry, ad daemons, and tracking.</p>
+            <ul class="preset-features">
+              <li>✓ Blocks Xiaomi background analytics</li>
+              <li>✓ Stops ad servers and promotional popups</li>
+              <li>✓ Leaves default launcher intact</li>
+              <li>✓ Sets animations to 0.5x for smoother clicks</li>
+            </ul>
+            <button id="btn-preset-balanced" class="btn btn-secondary btn-block btn-lg" onclick="applyPreset('balanced')">
+              Apply Balanced Profile
+            </button>
+          </div>
+
+          <!-- Preset 3: Ultra Minimalist -->
+          <div class="preset-card">
+            <div class="preset-icon">⚡</div>
+            <h3>Ultra Minimalist</h3>
+            <p class="preset-desc">Maximum stripped-down configuration for users running <strong>Projectivy Launcher</strong>. Completely disables all manufacturer hooks and disables animations for instantaneous response.</p>
+            <ul class="preset-features">
+              <li>✓ Complete PatchWall elimination</li>
+              <li>✓ Disables Google TV Play Movies / TV feed bloat</li>
+              <li>✓ Sets animation scale to 0.0x (Instant snappy response)</li>
+              <li>✓ Trims RAM caches to absolute minimum</li>
+            </ul>
+            <button id="btn-preset-extreme" class="btn btn-outline-warning btn-block btn-lg" onclick="applyPreset('extreme_minimalist')">
+              Apply Ultra Minimalist
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 3: DEBLOAT MANAGER ================= -->
+      <section id="tab-debloat" class="tab-content">
+        <div class="debloat-toolbar">
+          <div class="search-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="input-search-pkg" placeholder="Search packages (e.g. patchwall, ads, analytics)..." />
+          </div>
+
+          <div class="filter-pills">
+            <button class="filter-btn active" data-filter="all">All Packages</button>
+            <button class="filter-btn" data-filter="safe">Safe to Remove</button>
+            <button class="filter-btn" data-filter="xiaomi">Xiaomi Bloat</button>
+            <button class="filter-btn" data-filter="google">Google Clutter</button>
+            <button class="filter-btn" data-filter="disabled">Already Disabled</button>
+          </div>
+
+          <div class="batch-actions">
+            <button id="btn-refresh-packages" class="btn btn-secondary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              Refresh
+            </button>
+          </div>
+        </div>
+
+        <div class="packages-summary">
+          <span id="summary-pkg-count">Showing 0 packages</span>
+          <span class="legend">
+            <span class="legend-item"><span class="badge badge-emerald">Safe</span> Green: 100% Safe to Remove</span>
+            <span class="legend-item"><span class="badge badge-yellow">Optional</span> Yellow: Streaming / Review</span>
+            <span class="legend-item"><span class="badge badge-red">Critical</span> Red: Core System (Locked)</span>
+          </span>
+        </div>
+
+        <!-- Package Card Grid -->
+        <div id="packages-grid" class="packages-grid">
+          <div class="empty-state">
+            <p>Connect your TV to load the live package catalog.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 4: SPEED & TWEAKS ================= -->
+      <section id="tab-tweaks" class="tab-content">
+        <div class="grid-2col">
+          <!-- Animation Speed Scaler -->
+          <div class="card">
+            <div class="card-header">
+              <h2>Navigation Speed & Animations</h2>
+              <span class="badge badge-cyan">Snappy Remote</span>
+            </div>
+            <p class="text-muted">By default, Android TV plays slow 1.0x transition animations between apps and menus. Adjusting this to 0.5x or 0.0x makes your remote navigation feel 2x faster.</p>
+
+            <div class="speed-selector">
+              <label class="speed-option">
+                <input type="radio" name="anim-scale" value="1.0" id="anim-10" />
+                <div class="speed-box">
+                  <span class="speed-title">1.0x (Default)</span>
+                  <span class="speed-sub">Stock sluggish animations</span>
+                </div>
+              </label>
+
+              <label class="speed-option">
+                <input type="radio" name="anim-scale" value="0.5" id="anim-05" checked />
+                <div class="speed-box speed-box-recommended">
+                  <div class="speed-tag">Recommended</div>
+                  <span class="speed-title">0.5x (Fast)</span>
+                  <span class="speed-sub">Smooth &amp; 2x responsive</span>
+                </div>
+              </label>
+
+              <label class="speed-option">
+                <input type="radio" name="anim-scale" value="0.0" id="anim-00" />
+                <div class="speed-box">
+                  <span class="speed-title">0.0x (Instant)</span>
+                  <span class="speed-sub">Zero delay, instantaneous</span>
+                </div>
+              </label>
+            </div>
+
+            <button id="btn-apply-animation" class="btn btn-primary mt-3">
+              Apply Animation Speed
+            </button>
+          </div>
+
+          <!-- Cache & Memory Optimization -->
+          <div class="card">
+            <div class="card-header">
+              <h2>RAM Cache Cleaner</h2>
+              <span class="badge badge-purple">RAM Saver</span>
+            </div>
+            <p class="text-muted">Clears cached temporary image previews and junk RAM consumption from previous app sessions.</p>
+
+            <div class="tweak-item">
+              <div>
+                <h4>Trim Background Caches</h4>
+                <p class="text-muted">Forces system package manager to prune dead application caches.</p>
+              </div>
+              <button id="btn-trim-caches" class="btn btn-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                Trim Caches Now
+              </button>
+            </div>
+
+            <div class="tweak-item mt-3">
+              <div>
+                <h4>Reboot Device</h4>
+                <p class="text-muted">Clean restart via ADB to apply system-level changes cleanly.</p>
+              </div>
+              <button id="btn-reboot-tweak" class="btn btn-outline-danger">
+                Reboot TV
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Projectivy Launcher Feature Section -->
+        <div class="card mt-4 launcher-card">
+          <div class="launcher-header">
+            <div class="launcher-icon">✨</div>
+            <div>
+              <h2>The Ultimate Clean TV Experience: Projectivy Launcher</h2>
+              <p class="text-muted">The #1 community-recommended launcher for Xiaomi TVs and Mi Boxes. Completely replaces PatchWall with a sleek, ad-free, ultra-fast interface.</p>
+            </div>
+          </div>
+
+          <div class="launcher-steps">
+            <div class="launcher-step">
+              <span class="launcher-step-num">Step A</span>
+              <h4>Install Projectivy</h4>
+              <p>Install <strong>Projectivy Launcher</strong> directly from the Google Play Store on your TV, or sideload the official APK.</p>
+            </div>
+            <div class="launcher-step">
+              <span class="launcher-step-num">Step B</span>
+              <h4>Enable Accessibility Override</h4>
+              <p>Open Projectivy Settings &gt; General &gt; Enable <em>"Override current launcher"</em> and turn on the Accessibility service.</p>
+            </div>
+            <div class="launcher-step">
+              <span class="launcher-step-num">Step C</span>
+              <h4>Disable PatchWall</h4>
+              <p>Apply our <strong>Speed Demon</strong> profile in Tab 2 to prevent PatchWall from ever hogging memory in the background!</p>
+            </div>
+          </div>
+
+          <div class="launcher-actions-bar mt-4">
+            <button id="btn-open-tv-playstore" class="btn btn-secondary btn-lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+              📺 Open on TV Screen
+            </button>
+            <a href="https://play.google.com/store/apps/details?id=com.spocky.projengmenu" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              🌐 Google Play Store
+            </a>
+            <a href="https://github.com/spocky/projectivy-launcher/releases" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              📦 APK Releases
+            </a>
+          </div>
+
+          <!-- Lock as Default Launcher -->
+          <div class="launcher-override-box mt-4">
+            <div>
+              <h3>Permanent Default Home Screen (No Exiting)</h3>
+              <p class="text-muted">Since you have Projectivy installed, click below to lock Projectivy as the only active home screen. The Home button will always open Projectivy and you can never exit out of it!</p>
+            </div>
+            <div class="override-buttons">
+              <button id="btn-lock-projectivy" class="btn btn-primary btn-lg">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                🔒 Lock Projectivy as Default Launcher
+              </button>
+              <button id="btn-restore-stock-launcher" class="btn btn-outline-danger">
+                ↩️ Restore Stock Launcher
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 5: RESTORE & LOGS ================= -->
+      <section id="tab-restore" class="tab-content">
+        <div class="grid-2col">
+          <!-- Restore Vault -->
+          <div class="card">
+            <div class="card-header">
+              <h2>Restore Vault (Reversible Safety Net)</h2>
+              <span class="badge badge-emerald">Safe Rollback</span>
+            </div>
+            <p class="text-muted">All disabled apps remain stored in your TV firmware. You can restore any app at any time with a single click.</p>
+
+            <div id="disabled-packages-list" class="disabled-list">
+              <div class="empty-state">
+                <p>No disabled packages detected yet.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live ADB Logs -->
+          <div class="card">
+            <div class="card-header">
+              <h2>Execution Log Console</h2>
+              <button id="btn-refresh-logs" class="btn btn-sm btn-secondary">Refresh</button>
+            </div>
+            <div id="log-console" class="log-console">
+              <div class="log-entry">[Ready] Smart TV Optimizer initialized.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 6: HOW TO USE GUIDE ================= -->
+      <section id="tab-guide" class="tab-content">
+        <div class="section-intro">
+          <h2>Complete User Guide &amp; Walkthrough</h2>
+          <p class="text-muted">Everything you need to know about preparing your Xiaomi TV / Mi Box 4, connecting over Wi-Fi, and maximizing performance safely.</p>
+        </div>
+
+        <!-- Visual Step-by-Step Cards -->
+        <div class="guide-phases">
+          <!-- Phase 1 -->
+          <div class="card guide-card">
+            <div class="guide-phase-header">
+              <span class="guide-phase-tag">Phase 1</span>
+              <h3>Pre-Flight Checklist</h3>
+            </div>
+            <ul class="guide-list">
+              <li>
+                <span class="guide-check">✓</span>
+                <div>
+                  <strong>Same Wi-Fi Network:</strong> Make sure this computer and your Xiaomi TV / Mi Box 4 are connected to the exact same Wi-Fi router (avoid guest networks that block device discovery).
+                </div>
+              </li>
+              <li>
+                <span class="guide-check">✓</span>
+                <div>
+                  <strong>TV Remote in Hand:</strong> Keep your TV remote ready. You will need to press OK to authorize your computer when connecting for the first time.
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Phase 2 -->
+          <div class="card guide-card">
+            <div class="guide-phase-header">
+              <span class="guide-phase-tag">Phase 2</span>
+              <h3>One-Time TV Setup (Enable USB Debugging)</h3>
+            </div>
+            <div class="guide-steps-flow">
+              <div class="flow-step">
+                <span class="flow-num">1</span>
+                <div>
+                  <strong>Open TV Settings:</strong> Click the gear icon on the top right of your TV home screen.
+                </div>
+              </div>
+              <div class="flow-step">
+                <span class="flow-num">2</span>
+                <div>
+                  <strong>Open About &amp; Build:</strong> Go to <em>Device Preferences</em> &gt; <em>About</em> (or <em>System &gt; About</em>).
+                </div>
+              </div>
+              <div class="flow-step">
+                <span class="flow-num">3</span>
+                <div>
+                  <strong>Click 7 Times:</strong> Scroll down to <em>Build</em> and click the remote's center <strong>OK</strong> button 7 times until it says <em>"You are now a developer!"</em>.
+                </div>
+              </div>
+              <div class="flow-step">
+                <span class="flow-num">4</span>
+                <div>
+                  <strong>Turn on USB Debugging:</strong> Press Back, enter <em>Developer Options</em>, scroll down to <strong>USB Debugging</strong> and toggle it <strong>ON</strong>.
+                </div>
+              </div>
+              <div class="flow-step">
+                <span class="flow-num">5</span>
+                <div>
+                  <strong>Get TV IP Address:</strong> Go to <em>Settings &gt; Network &amp; Internet</em> &gt; click your Wi-Fi network and note down the IP (e.g. <code>192.168.1.150</code>).
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phase 3 -->
+          <div class="card guide-card">
+            <div class="guide-phase-header">
+              <span class="guide-phase-tag">Phase 3</span>
+              <h3>Connecting &amp; Authorizing Security Key</h3>
+            </div>
+            <div class="guide-callout">
+              <div class="callout-icon">🔑</div>
+              <div>
+                <strong>Crucial TV Prompt:</strong> When you enter the IP in Tab 1 and click <strong>"Connect to TV"</strong>, look up at your TV screen. A dialog will pop up:
+                <p class="mt-2 text-cyan"><em>"Allow USB debugging? The computer's RSA key fingerprint is: ..."</em></p>
+                <p class="mt-1">Check <strong>"Always allow from this computer"</strong> and select <strong>OK</strong> with your remote.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phase 4 -->
+          <div class="card guide-card">
+            <div class="guide-phase-header">
+              <span class="guide-phase-tag">Phase 4</span>
+              <h3>Applying Optimization Presets</h3>
+            </div>
+            <div class="guide-presets-info">
+              <div class="guide-preset-box">
+                <h4>🚀 Speed Demon (Recommended)</h4>
+                <p>Designed specifically for Xiaomi Mi Box 4 and Xiaomi TVs. Eliminates PatchWall bloat, advertising daemons (<code>mitv.advert</code>), telemetry (<code>mitv.analytics</code>), printer spoolers, clears RAM caches, and accelerates animation speed to 0.5x. Frees up 300MB–600MB of RAM.</p>
+              </div>
+              <div class="guide-preset-box">
+                <h4>🛡️ Balanced &amp; Clean</h4>
+                <p>Silently terminates background data analytics and promotional splash screens without modifying your existing launcher layout.</p>
+              </div>
+              <div class="guide-preset-box">
+                <h4>⚡ Ultra Minimalist</h4>
+                <p>Completely strips manufacturer background tasks and sets animation speed to 0.0x for instant response. Best when paired with <strong>Projectivy Launcher</strong>.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phase 5: FAQ & Safety -->
+          <div class="card guide-card">
+            <div class="guide-phase-header">
+              <span class="guide-phase-tag">Phase 5</span>
+              <h3>Frequently Asked Questions &amp; Safety FAQ</h3>
+            </div>
+            <div class="faq-list">
+              <div class="faq-item">
+                <h4>Can this brick or damage my Xiaomi TV / Mi Box?</h4>
+                <p><strong>No.</strong> The tool uses Android's safe per-user service management (<code>pm disable-user --user 0</code>). The original firmware packages remain untouched in system storage. No bootloader unlocking or root is involved.</p>
+              </div>
+              <div class="faq-item">
+                <h4>Will 4K Netflix, Disney+, and Prime Video continue working in 4K HDR?</h4>
+                <p><strong>Yes, 100%.</strong> Because the bootloader remains officially certified and locked, your Widevine L1 DRM security keys are fully preserved. Dolby Vision, HDR10, and 4K playback work seamlessly.</p>
+              </div>
+              <div class="faq-item">
+                <h4>What if the "Allow USB Debugging" popup doesn't appear on my TV?</h4>
+                <p>On your TV, go to <em>Settings &gt; Device Preferences &gt; Developer Options</em>. Turn <strong>USB Debugging OFF</strong>, wait 3 seconds, then turn it <strong>ON</strong> again. Return to Tab 1 on your PC and click <em>Connect to TV</em>.</p>
+              </div>
+              <div class="faq-item">
+                <h4>How do I undo changes or restore a disabled app?</h4>
+                <p>Simply navigate to the <strong>Restore Vault &amp; Logs</strong> tab. Every disabled package is listed with a single-click <strong>"Restore"</strong> button that brings the app back to life instantly!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{
+  "name": "smart-tv-optimizer",
+  "version": "1.0.0",
+  "description": "Universal Smart TV & Android TV Optimizer & Debloater",
+  "main": "src/electron-main.js",
+  "scripts": {
+    "start": "electron .",
+    "start:web": "node src/server.js",
+    "build:exe": "electron-builder --win",
+    "build:portable": "electron-builder --win portable",
+    "build:installer": "electron-builder --win nsis",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "android-tv",
+    "smart-tv",
+    "debloater",
+    "xiaomi-tv",
+    "adb",
+    "optimizer"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.3.0",
+    "open": "^11.0.4"
+  },
+  "devDependencies": {
+    "electron": "^45.0.0",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "com.smarttv.optimizer",
+    "productName": "Smart TV Optimizer",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "public/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "bin",
+        "to": "bin",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Smart TV Optimizer"
+    },
+    "portable": {
+      "artifactName": "Smart-TV-Optimizer-Portable.exe"
+    }
+  }
+}
