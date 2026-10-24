@@ -3,6 +3,14 @@ node_modules/
 
 # Production builds & packaged binaries (uploaded via GitHub Releases)
 dist/
+output/
+
+# Android Gradle build & cache
+.gradle/
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
 
 # Bundled platform tools (downloaded automatically on runtime if not packaged)
 bin/platform-tools/
