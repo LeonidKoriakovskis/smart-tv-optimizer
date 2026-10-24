@@ -25,6 +25,7 @@ No command lines or installations required. Download and run:
 | :--- | :--- | :--- | :--- |
 | **Portable `.exe`** | Standalone Executable | [📥 **Download Portable EXE**](https://github.com/LeonidKoriakovskis/smart-tv-optimizer/releases/latest/download/Smart-TV-Optimizer-Portable.exe) | Single `.exe` file. Double-click and run anywhere (USB stick, Desktop). Zero install. |
 | **Windows Setup** | Standard Installer | [📥 **Download Windows Installer**](https://github.com/LeonidKoriakovskis/smart-tv-optimizer/releases/latest/download/Smart.TV.Optimizer.Setup.1.0.0.exe) | Installs with Start Menu & Desktop shortcuts. Clean uninstaller included. |
+| **Android Phone App** | Standalone Mobile APK | [📥 **Download Android APK**](https://github.com/LeonidKoriakovskis/smart-tv-optimizer/releases/latest/download/Smart-TV-Optimizer.apk) | Standalone phone/tablet companion app. Optimize TVs directly from your couch over Wi-Fi. |
 
 > 💡 **Notice:** Both packages come with **official Google Android Platform-Tools (`adb.exe`) already bundled inside**. You do not need to install Android Studio or SDK tools manually.
 
